@@ -1,7 +1,7 @@
 {
-  "name": "vue-directive",
-  "version": "0.0.1",
-  "description": "Vue 3 自定义指令集合",
+  "name": "vuse-directive",
+  "version": "0.0.2",
+  "description": "Vue 3 directives collection",
   "type": "module",
   "main": "./dist/vue-directive.umd.cjs",
   "module": "./dist/vue-directive.js",
@@ -22,7 +22,8 @@
     "dev": "vite",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release": "node scripts/publish.js"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
