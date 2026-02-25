@@ -5,10 +5,12 @@ import {
     type DirectiveBinding
 } from 'vue';
 
+type ClickHandler = (event: MouseEvent, ...args: unknown[]) => any;
+
 interface ThrottleEl extends HTMLElement {
     _throttleTimer: ReturnType<typeof setTimeout> | null;
     _throttleHandler: (e: Event) => void;
-    _latestBinding: DirectiveBinding;
+    _latestBinding: DirectiveBinding<ClickHandler>;
     _hasCalledOnce: boolean;
     _listenerOptions: AddEventListenerOptions;
     _eventName: 'click' | 'contextmenu';
@@ -23,7 +25,7 @@ interface ThrottleEl extends HTMLElement {
 type VOnModifiers = typeof withModifiers extends (_: any, modifiers: infer M) => void ? M : never;
 
 const throttleClick: Directive = {
-    mounted(el: ThrottleEl, binding: DirectiveBinding) {
+    mounted(el: ThrottleEl, binding: DirectiveBinding<ClickHandler>) {
         el._latestBinding = binding;
         el._throttleTimer = null;
         el._hasCalledOnce = false;
@@ -65,7 +67,7 @@ const throttleClick: Directive = {
                 return;
             }
 
-            const invoke = (evt: Event) => {
+            const invoke = (evt: MouseEvent) => {
                 el._hasCalledOnce = true;
                 el._trailingEvent = null;
 
@@ -91,11 +93,11 @@ const throttleClick: Directive = {
             };
 
             if (delay === 0) {
-                invoke(e);
+                invoke(e as MouseEvent);
                 return;
             }
 
-            invoke(e);
+            invoke(e as MouseEvent);
 
             el._throttleTimer = setTimeout(() => {
                 el._throttleTimer = null;

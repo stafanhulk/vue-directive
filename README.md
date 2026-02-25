@@ -91,55 +91,22 @@ async function submitForm() {
 
 #### Callback Signature
 
-The binding value receives the native `Event` object:
+```ts
+type ClickHandler = (event: MouseEvent, ...args: unknown[]) => any
+```
+
+The binding value receives a `MouseEvent` as the first argument:
 
 ```ts
-function handleClick(e: Event) {
+function handleClick(e: MouseEvent) {
   console.log('clicked', e)
 }
 ```
 
-In async mode, the callback should return a `Promise`:
+In async mode, return a `Promise` to activate the async lock:
 
 ```ts
-async function handleAsync(e: Event): Promise<void> {
-  await doSomething()
+async function handleAsync(e: MouseEvent) {
+  await fetch('/api/submit', { method: 'POST' })
 }
 ```
-
----
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Build
-pnpm build
-
-# Format code
-pnpm format
-
-# Lint + format check
-pnpm check
-
-# Auto fix
-pnpm check:fix
-```
-
-## Publishing to npm
-
-```bash
-# 1. Log in to npm
-npm login
-
-# 2. Publish (add --access public for scoped packages on first publish)
-npm publish
-```
-
-> If the package name `vue-directive` is already taken, update the `name` field in `package.json` to something like `@your-username/vue-directive`.
-
-## License
-
-MIT
