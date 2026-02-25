@@ -5,9 +5,11 @@ A collection of Vue 3 custom directives
 ## Installation
 
 ```bash
-npm i vue-directive
+npm install vuse-directive
 # or
-pnpm add vue-directive
+pnpm add vuse-directive
+# or
+yarn add vuse-directive
 ```
 
 ## Getting Started
@@ -17,7 +19,7 @@ pnpm add vue-directive
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import { throttleClick } from 'vue-directive'
+import { throttleClick } from 'vuse-directive'
 
 const app = createApp(App)
 app.directive('throttle-click', throttleClick)
@@ -27,7 +29,7 @@ app.mount('#app')
 ### On-demand Import
 
 ```ts
-import { throttleClick } from 'vue-directive'
+import { throttleClick } from 'vuse-directive'
 ```
 
 ---

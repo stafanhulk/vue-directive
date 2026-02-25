@@ -1,6 +1,6 @@
 {
   "name": "vuse-directive",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vue 3 directives collection",
   "type": "module",
   "main": "./dist/vue-directive.umd.cjs",
