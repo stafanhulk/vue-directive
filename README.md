@@ -53,19 +53,46 @@ Throttles click events to prevent repeated triggers within a short period. Suppo
 <button v-throttle-click:0="handleClick">Submit</button>
 ```
 
+#### Arg
+
+| Arg | Description |
+|-----|-------------|
+| _(omitted)_ | Default throttle interval: `300` ms |
+| `0` | Disable throttle; callback fires on every click, modifiers still apply |
+| _number_ | Custom throttle interval in milliseconds (e.g. `:500` → 500 ms) |
+
 #### Modifiers
+
+**Throttle-specific modifiers**
 
 | Modifier | Description |
 |----------|-------------|
 | `.once` | Fire only once; all subsequent clicks are ignored |
-| `.trailing` | If a click is blocked during cooldown, it fires once after the cooldown ends |
+| `.trailing` | If a click is blocked during cooldown, re-fire once after the cooldown (or async call) ends |
 | `.async` | Async mode: new clicks are blocked until the previous callback's Promise resolves/rejects |
+
+**Event listener modifiers**
+
+| Modifier | Description |
+|----------|-------------|
 | `.right` | Listen to `contextmenu` (right-click) instead of `click` |
 | `.capture` | Use capture phase for the event listener |
-| `.passive` | Use passive listener mode for better scroll performance |
-| `.stop` | Stop event propagation (passed to Vue's `withModifiers`) |
-| `.prevent` | Prevent default behavior (passed to Vue's `withModifiers`) |
-| `.self` | Only trigger when the event target is the element itself |
+| `.passive` | Mark the listener as passive for better scroll performance |
+
+**Vue `withModifiers` pass-through**
+
+| Modifier | Description |
+|----------|-------------|
+| `.stop` | Call `event.stopPropagation()` |
+| `.prevent` | Call `event.preventDefault()` |
+| `.self` | Only trigger when `event.target` is the element itself |
+| `.ctrl` | Only trigger when the Ctrl key is held |
+| `.shift` | Only trigger when the Shift key is held |
+| `.alt` | Only trigger when the Alt / Option key is held |
+| `.meta` | Only trigger when the Meta / Command key is held |
+| `.left` | Only trigger on left mouse button clicks |
+| `.middle` | Only trigger on middle mouse button clicks |
+| `.exact` | Only trigger when exactly the specified modifier keys are pressed (no others) |
 
 #### Examples
 
