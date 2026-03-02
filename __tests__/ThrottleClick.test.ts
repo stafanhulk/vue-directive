@@ -86,8 +86,8 @@ describe('v-throttle-click', () => {
       setup: () => ({ onClick: asyncHandler }),
     });
 
-    await wrapper.trigger('click'); // 触发，Promise pending
-    await wrapper.trigger('click'); // 被拦截
+    wrapper.trigger('click'); // 触发，Promise pending
+    wrapper.trigger('click'); // 被拦截
 
     expect(asyncHandler).toHaveBeenCalledTimes(1);
 

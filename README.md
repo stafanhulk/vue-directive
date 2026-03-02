@@ -1,6 +1,6 @@
-# vue-directive
+# vuse-directive
 
-A collection of Vue 3 custom directives
+A collection of Vue 3 custom directives.
 
 ## Installation
 
@@ -14,128 +14,98 @@ yarn add vuse-directive
 
 ## Getting Started
 
-### Global Registration
+### Plugin (register all directives globally)
 
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import { throttleClick } from 'vuse-directive'
+import VuseDirective from 'vuse-directive'
 
 const app = createApp(App)
-app.directive('throttle-click', throttleClick)
+app.use(VuseDirective)
 app.mount('#app')
 ```
 
-### On-demand Import
+### Single directive
 
 ```ts
-import { throttleClick } from 'vuse-directive'
+import { createApp } from 'vue'
+import App from './App.vue'
+import { throttleClick, debounceClick } from 'vuse-directive'
+
+const app = createApp(App)
+app.directive('throttle-click', throttleClick)
+app.directive('debounce-click', debounceClick)
+app.mount('#app')
+```
+
+### On-demand import (local registration)
+
+```ts
+import { throttleClick, debounceClick } from 'vuse-directive'
 ```
 
 ---
 
 ## Directives
 
-### `v-throttle-click` — Throttled Click
+| Directive | Description | Docs |
+|-----------|-------------|------|
+| `v-throttle-click` | Throttle click events — fires immediately, then locks for a cooldown period | [→ Details](./docs/throttle-click.md) |
+| `v-debounce-click` | Debounce click events — fires after the user stops clicking for a set duration | [→ Details](./docs/debounce-click.md) |
 
-Throttles click events to prevent repeated triggers within a short period. Supports custom delay, async lock, trailing call, and Vue modifier pass-through.
+---
 
-#### Basic Usage
+## `v-throttle-click`
+
+Fires immediately on click, then ignores subsequent clicks until the cooldown ends.
 
 ```vue
-<!-- Default throttle interval: 300ms -->
+<!-- Default: 300ms cooldown -->
 <button v-throttle-click="handleClick">Submit</button>
 
-<!-- Custom interval (in ms) -->
-<button v-throttle-click:500="handleClick">Submit</button>
+<!-- Custom cooldown -->
+<button v-throttle-click:1000="handleClick">Submit</button>
 
-<!-- Interval 0: no throttle, modifiers still apply -->
-<button v-throttle-click:0="handleClick">Submit</button>
+<!-- Async lock: blocks until the returned Promise settles -->
+<button v-throttle-click.async="submitForm">Submit</button>
+
+<!-- Async + trailing: re-fires the last blocked click after the Promise settles -->
+<button v-throttle-click.async.trailing="submitForm">Submit</button>
 ```
 
-#### Arg
+**Key modifiers:** `.once` · `.trailing` · `.async` · `.right` · `.stop` · `.prevent`
 
-| Arg | Description |
-|-----|-------------|
-| _(omitted)_ | Default throttle interval: `300` ms |
-| `0` | Disable throttle; callback fires on every click, modifiers still apply |
-| _number_ | Custom throttle interval in milliseconds (e.g. `:500` → 500 ms) |
+[→ Full documentation](./docs/throttle-click.md)
 
-#### Modifiers
+---
 
-**Throttle-specific modifiers**
+## `v-debounce-click`
 
-| Modifier | Description |
-|----------|-------------|
-| `.once` | Fire only once; all subsequent clicks are ignored |
-| `.trailing` | If a click is blocked during cooldown, re-fire once after the cooldown (or async call) ends |
-| `.async` | Async mode: new clicks are blocked until the previous callback's Promise resolves/rejects |
-
-**Event listener modifiers**
-
-| Modifier | Description |
-|----------|-------------|
-| `.right` | Listen to `contextmenu` (right-click) instead of `click` |
-| `.capture` | Use capture phase for the event listener |
-| `.passive` | Mark the listener as passive for better scroll performance |
-
-**Vue `withModifiers` pass-through**
-
-| Modifier | Description |
-|----------|-------------|
-| `.stop` | Call `event.stopPropagation()` |
-| `.prevent` | Call `event.preventDefault()` |
-| `.self` | Only trigger when `event.target` is the element itself |
-| `.ctrl` | Only trigger when the Ctrl key is held |
-| `.shift` | Only trigger when the Shift key is held |
-| `.alt` | Only trigger when the Alt / Option key is held |
-| `.meta` | Only trigger when the Meta / Command key is held |
-| `.left` | Only trigger on left mouse button clicks |
-| `.middle` | Only trigger on middle mouse button clicks |
-| `.exact` | Only trigger when exactly the specified modifier keys are pressed (no others) |
-
-#### Examples
+Fires after the user stops clicking for the specified delay (trailing by default).
 
 ```vue
-<script setup lang="ts">
-async function submitForm() {
-  await fetch('/api/submit', { method: 'POST' })
-}
-</script>
+<!-- Default: fires 300ms after the last click -->
+<button v-debounce-click="handleClick">Search</button>
 
-<template>
-  <!-- Async + trailing: blocks repeated clicks during async call,
-       fires the last blocked click after the call completes -->
-  <button v-throttle-click:1000.async.trailing="submitForm">
-    Submit
-  </button>
+<!-- Custom delay -->
+<button v-debounce-click:500="handleClick">Search</button>
 
-  <!-- Fire once only -->
-  <button v-throttle-click.once="handleClick">Click once</button>
-
-  <!-- Throttle right-click -->
-  <div v-throttle-click.right="openMenu">Right-click area</div>
-</template>
+<!-- Leading: fires immediately on first click, trailing if more clicks follow -->
+<button v-debounce-click.leading="handleClick">Search</button>
 ```
 
-#### Callback Signature
+**Key modifiers:** `.once` · `.leading` · `.right` · `.stop` · `.prevent`
+
+### Max-wait cap
+
+By default there is no max-wait limit. Use `makeDebounceClick` to guarantee the handler fires within a fixed window even during continuous clicks:
 
 ```ts
-type ClickHandler = (event: MouseEvent, ...args: unknown[]) => any
+import { makeDebounceClick } from 'vuse-directive'
+
+// Fires at most every 3000ms even if clicks never stop
+app.directive('debounce-click', makeDebounceClick(3000))
 ```
 
-The binding value receives a `MouseEvent` as the first argument:
-
-```ts
-function handleClick(e: MouseEvent) {
-  console.log('clicked', e)
-}
-```
-
-In async mode, return a `Promise` to activate the async lock:
-
-```ts
-async function handleAsync(e: MouseEvent) {
-  await fetch('/api/submit', { method: 'POST' })
-}
-```
+[→ Full documentation](./docs/debounce-click.md)

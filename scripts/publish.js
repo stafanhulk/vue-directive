@@ -6,10 +6,22 @@
  * 默认 bump patch
  */
 
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+function run(cmd) {
+  const result = spawnSync(cmd, { stdio: 'inherit', shell: true });
+  if (result.error || result.status !== 0) {
+    console.error(`\n执行失败: ${cmd}`);
+    process.exit(result.status ?? 1);
+  }
+}
+
+run('npm run check');
+run('npm run test');
+run('npm run build');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -69,5 +81,7 @@ pkg.version = nextVersion;
 fs.writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8');
 console.log(`版本已更新: ${current} -> ${nextVersion}`);
 
-execSync('npm publish', { stdio: 'inherit' });
+
+// run('npm login');
+run('npm publish');
 console.log(`已发布 v${nextVersion}`);

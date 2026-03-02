@@ -1,6 +1,6 @@
 {
   "name": "vuse-directive",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Vue 3 directives collection",
   "type": "module",
   "main": "./dist/vue-directive.umd.cjs",
@@ -14,14 +14,16 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "docs"
   ],
   "scripts": {
     "test": "jest",
     "build": "vite build",
     "dev": "vite",
     "format": "biome format --write .",
-    "format:check": "biome format .",
+    "check": "biome check ./src",
+    "prepare": "husky",
     "prepublishOnly": "npm run build",
     "release": "node scripts/publish.js"
   },
@@ -29,10 +31,13 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.0",
+    "@biomejs/biome": "^2.4.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.3.0",
+    "@vitejs/plugin-vue": "^5.0.0",
     "@vue/test-utils": "^2.4.6",
+    "element-plus": "^2.13.3",
+    "husky": "^9.0.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "ts-jest": "^29.4.6",
