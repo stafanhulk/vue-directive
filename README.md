@@ -49,10 +49,12 @@ import { throttleClick, debounceClick } from 'vuse-directive'
 
 ## Directives
 
-| Directive | Description | Docs |
-|-----------|-------------|------|
-| `v-throttle-click` | Throttle click events — fires immediately, then locks for a cooldown period | [→ Details](./docs/throttle-click.md) |
-| `v-debounce-click` | Debounce click events — fires after the user stops clicking for a set duration | [→ Details](./docs/debounce-click.md) |
+
+| Directive          | Description                                                                    | Docs |
+| ------------------ | ------------------------------------------------------------------------------ | ---- |
+| `v-throttle-click` | Throttle click events — fires immediately, then locks for a cooldown period    |      |
+| `v-debounce-click` | Debounce click events — fires after the user stops clicking for a set duration |      |
+
 
 ---
 
@@ -75,8 +77,6 @@ Fires immediately on click, then ignores subsequent clicks until the cooldown en
 ```
 
 **Key modifiers:** `.once` · `.trailing` · `.async` · `.right` · `.stop` · `.prevent`
-
-[→ Full documentation](./docs/throttle-click.md)
 
 ---
 
@@ -108,4 +108,10 @@ import { makeDebounceClick } from 'vuse-directive'
 app.directive('debounce-click', makeDebounceClick(3000))
 ```
 
-[→ Full documentation](./docs/debounce-click.md)
+---
+
+## Issues
+
+Found a bug or have a suggestion? Feel free to send an email to:
+
+📮 stafanhulk@gmail.com
