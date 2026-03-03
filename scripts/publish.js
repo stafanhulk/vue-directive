@@ -82,6 +82,6 @@ fs.writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8');
 console.log(`版本已更新: ${current} -> ${nextVersion}`);
 
 
-// run('npm login');
+run('npm login');
 run('npm publish');
 console.log(`已发布 v${nextVersion}`);

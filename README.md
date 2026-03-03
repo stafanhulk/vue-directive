@@ -110,6 +110,42 @@ app.directive('debounce-click', makeDebounceClick(3000))
 
 ---
 
+## ⚠️ Important Notes
+
+### Always pass a function, not a function call
+
+Unlike `@click`, custom directives do **not** auto-wrap the binding value in a function. Writing `v-throttle-click="fn(arg)"` causes `fn(arg)` to execute **at render time**, not on click.
+
+```vue
+<!-- ❌ Wrong: fn(arg) is called on every render -->
+<button v-throttle-click="handleClick(id)">Click</button>
+
+<!-- ✅ Correct: wrap in an arrow function -->
+<button v-throttle-click="() => handleClick(id)">Click</button>
+
+<!-- ✅ Also fine: no arguments, pass the reference directly -->
+<button v-throttle-click="handleClick">Click</button>
+```
+
+This is especially easy to get wrong inside scoped slots where you need to pass slot data as an argument:
+
+```vue
+<!-- ❌ Wrong: deleteRow(scope.$index) fires on every row render -->
+<template #default="scope">
+  <button v-throttle-click="deleteRow(scope.$index)">Delete</button>
+</template>
+
+<!-- ✅ Correct -->
+<template #default="scope">
+  <button v-throttle-click="() => deleteRow(scope.$index)">Delete</button>
+</template>
+```
+
+> **Why does `@click="fn(arg)"` work then?**  
+> Vue's template compiler treats event listeners specially and automatically compiles them into `onClick: ($event) => fn(arg)`. Custom directives receive a plain evaluated expression, so no wrapping happens.
+
+---
+
 ## Issues
 
 Found a bug or have a suggestion? Feel free to send an email to:

@@ -137,6 +137,7 @@ const throttleClick: Directive = {
   },
   updated(el: ThrottleEl, binding: DirectiveBinding) {
     const directive = el[DirectiveKey];
+    console.log('[lwb]', directive);
 
     // capture/passive 变化时需要重新绑定监听（极少见，但保证正确性）
     // 理论上不会发生变化，但为了严谨性，还是判断一下

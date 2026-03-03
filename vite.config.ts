@@ -22,7 +22,7 @@ export default defineConfig(({ command }) => {
     plugins.push(
       dts({
         insertTypesEntry: true,
-        outDir: 'dist',
+        outDir: 'types',
         tsconfigPath: 'tsconfig.build.json',
       })
     );

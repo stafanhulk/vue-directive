@@ -1,20 +1,21 @@
 {
   "name": "vuse-directive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vue 3 directives collection",
   "type": "module",
   "main": "./dist/vue-directive.umd.cjs",
   "module": "./dist/vue-directive.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/vue-directive.js",
       "require": "./dist/vue-directive.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./types/index.d.ts"
     }
   },
   "files": [
     "dist",
+    "types",
     "docs"
   ],
   "scripts": {
@@ -36,6 +37,7 @@
     "@types/node": "^25.3.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "@vue/test-utils": "^2.4.6",
+    "cz-conventional-changelog": "^3.3.0",
     "element-plus": "^2.13.3",
     "husky": "^9.0.0",
     "jest": "^30.2.0",
@@ -54,6 +56,11 @@
     "directive",
     "directives"
   ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "sideEffects": false,
   "author": "Stafan Hulk",
   "license": "MIT",

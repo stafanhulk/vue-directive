@@ -13,6 +13,46 @@ const asyncLog = async (msg: string) => {
   log(msg);
   await new Promise((resolve) => setTimeout(resolve, 2000));
 };
+
+const tableData = ref([
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+])
+
+const deleteRow = (index: number) => {
+  tableData.value.splice(index, 1)
+}
+
+const vTest = {
+  created(el: HTMLElement) {
+    console.log('[lwb]', el);
+  },
+  mounted(el: HTMLElement) {
+    console.log('[lwb]', el);
+  },
+}
 </script>
 
 <template>
@@ -39,6 +79,15 @@ const asyncLog = async (msg: string) => {
       <h3>async 模式</h3>
       <button v-throttle-click.async="() => asyncLog('async')">async 节流</button>
     </section>
+    <el-table :data="tableData" style="width: 100%" max-height="250">
+      <el-table-column fixed="right" label="Operations" min-width="120">
+        <template #default="scope">
+          <el-button v-throttle-click="() => deleteRow(scope.row.id)" link type="primary" size="small">
+            Remove
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -50,17 +99,19 @@ const asyncLog = async (msg: string) => {
   border: 1px solid #eee;
   border-radius: 8px;
 }
+
 h2 {
   font-size: 1.1rem;
   margin: 0 0 0.5rem;
 }
+
 h3 {
   font-size: 0.95rem;
   margin: 0.75rem 0 0.25rem;
 }
+
 button {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
 </style>
-
